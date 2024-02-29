@@ -17,20 +17,12 @@ class CloudLakehouseLabsContext:
     self.__user_id = re.sub("[^a-zA-Z0-9]", "_", text)
 
     # Create the working schema
-    catalogName = None
+    catalogName = 'cloud_lakehouse_labs'
     databaseName = self.__user_id + '_' + self.__useCase
-    for catalog in ['cloud_lakehouse_labs', 'main', 'hive_metastore']:
-      try:
-        catalogName = catalog
-        if catalogName != 'hive_metastore': spark.sql("create database if not exists " + catalog + "." + databaseName)
-        else: spark.sql("create database if not exists " + databaseName)
-        break
-      except Exception as e:
-        pass
-    if catalogName is None: raise Exception("No catalog found with CREATE SCHEMA privileges for user '" + self.__user + "'")
+    spark.sql("create database if not exists " + 'cloud_lakehouse_labs' + "." + databaseName)
     self.__catalog = catalogName
     self.__schema = databaseName
-    if catalogName != 'hive_metastore': spark.sql('use catalog ' + self.__catalog)
+    spark.sql('use catalog ' + self.__catalog)
     spark.sql('use database ' + self.__schema)
 
     # Create the working directory under DBFS

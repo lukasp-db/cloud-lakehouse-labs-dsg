@@ -102,9 +102,10 @@ def ingest_folder(folder, data_format, table):
             .option("checkpointLocation",
                     f"{deltaTablesDirectory}/checkpoint/{table}") #exactly once delivery on Delta tables over restart/kill
             .option("mergeSchema", "true") #merge any new column dynamically
-            .trigger(once = True) #Remove for real time streaming
+            .trigger(once=True) #Remove for real time streaming
             .table(table)) #Table will be created if we haven't specified the schema first
-  
+
+print(rawDataDirectory)
 ingest_folder(rawDataDirectory + '/orders', 'json', 'churn_orders_bronze')
 ingest_folder(rawDataDirectory + '/events', 'csv', 'churn_app_events')
 ingest_folder(rawDataDirectory + '/users', 'json',  'churn_users_bronze').awaitTermination()
